@@ -1,8 +1,54 @@
 <!DOCTYPE html>
-<html>
-<head><title>DreamsHelix | Invalid Certificate</title></head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Certificate Not Found | DreamsHelix</title>
+  <style>
+    body {
+      background: #fff1f1;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+    .card {
+      background: #fff;
+      max-width: 500px;
+      margin: 2rem auto;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 20px rgba(255,0,0,0.1);
+    }
+    img.logo {
+      max-width: 140px;
+      margin-bottom: 1rem;
+    }
+    h1 {
+      color: #e02424;
+      margin-bottom: 0.5rem;
+    }
+    p {
+      font-size: 1.1rem;
+      color: #444;
+    }
+    .try-again {
+      margin-top: 1.5rem;
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background: #e02424;
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+  </style>
+</head>
 <body>
-    <h2>❌ Invalid Certificate ID</h2>
-    <p>Please check the certificate or contact support.</p>
+  <div class="card">
+    <img class="logo" src="Dreams.jpg" alt="DreamsHelix Logo" />
+    <h1>❌ Invalid Certificate ID</h1>
+    <p>We couldn’t find a certificate matching this ID.</p>
+    <p>Please check the code and try again.</p>
+    <a href="https://verify.dreamshelix.com" class="try-again">Verify Again</a>
+  </div>
 </body>
 </html>

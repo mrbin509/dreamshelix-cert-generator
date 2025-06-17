@@ -1,12 +1,56 @@
 <!DOCTYPE html>
-<html>
-<head><title>DreamsHelix | Certificate Verified</title></head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Certificate Verified | DreamsHelix</title>
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+    .card {
+      background: #fff;
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    img.logo {
+      max-width: 150px;
+      margin-bottom: 1rem;
+    }
+    h1 {
+      color: #2c7be5;
+      margin-bottom: 0.5rem;
+    }
+    p {
+      font-size: 1.1rem;
+      margin: 0.5rem 0;
+    }
+    .cert-id {
+      background: #edf2fa;
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      font-weight: bold;
+      color: #1e3a8a;
+    }
+  </style>
+</head>
 <body>
+<div class="card">
+    <img class="logo" src="Dreams.jpg" alt="DreamsHelix Logo" />
     <h2>✅ Certificate Verified</h2>
     <p><strong>Name:</strong> {{ row["Name"] }}</p>
     <p><strong>Course:</strong> {{ row["Course"] }}</p>
     <p><strong>Batch:</strong> {{ row["Batch"] }}</p>
     <p><strong>Issued On:</strong> {{ row["Issue Date"] }}</p>
     <p><strong>Status:</strong> {{ row["Status"] }}</p>
+</div>
 </body>
 </html>

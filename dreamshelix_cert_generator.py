@@ -7,8 +7,8 @@ import os
 
 # === CONFIGURATION ===
 GOOGLE_SHEET_NAME = "DreamsHelix Certificates"
-CERT_TEMPLATE = "cert_templates/base_template.png"  # Put your certificate background image here
-QR_URL_PREFIX = "https://script.google.com/macros/s/YOUR_APPS_SCRIPT_QR_URL/exec?cert_id="
+CERT_TEMPLATE = "cert_templates.jpg"  # Put your certificate background image here
+QR_URL_PREFIX = "https://verify.dreamshelix.com/verify?cert_id="
 
 # === FOLDER SETUP ===
 os.makedirs("certificates", exist_ok=True)

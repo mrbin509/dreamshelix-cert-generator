@@ -2,7 +2,7 @@ from flask import Flask, request, render_template
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-app = Flask(_name_)
+app = Flask(__name__)
 
 # Google Sheet Setup
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]

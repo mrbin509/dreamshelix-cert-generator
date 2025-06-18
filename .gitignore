@@ -1,4 +1,4 @@
 # .gitignore
 credentials.json
 certificates/
-qr_codes/
+qr_codes/"credentials.json" 

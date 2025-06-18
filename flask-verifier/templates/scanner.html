@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DreamsHelix Certificate QR Scanner</title>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f3f4f6;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    header {
+      background-color: #4A148C;
+      color: white;
+      padding: 20px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .container {
+      padding: 30px;
+    }
+
+    #qr-section {
+      margin-top: 20px;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 20px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #reader {
+      width: 100%;
+      max-width: 400px;
+      margin: 20px auto;
+      display: none;
+    }
+
+    #loader {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 200px;
+    }
+
+    .spinner {
+      width: 60px;
+      height: 60px;
+      border: 6px solid #ddd;
+      border-top-color: #4A148C;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>DreamsHelix Certificate Verification</header>
+
+<div class="container">
+  <section id="qr-section">
+    <h2>📷 QR Scanner</h2>
+    <p>Allow camera access and scan your certificate QR code.</p>
+
+    <!-- Custom loader shown before scanner starts -->
+    <div id="loader">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- QR Scanner camera view -->
+    <div id="reader"></div>
+  </section>
+</div>
+
+<script>
+  function onScanSuccess(decodedText) {
+    // Redirect to the verification route
+    window.location.href = /verify?cert_id=${decodedText.trim()};
+  }
+
+  const html5QrCode = new Html5Qrcode("reader");
+
+  Html5Qrcode.getCameras().then(cameras => {
+    if (cameras && cameras.length) {
+      html5QrCode.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: 250 },
+        onScanSuccess
+      ).then(() => {
+        // Hide loader and show scanner when ready
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("reader").style.display = "block";
+      }).catch(err => {
+        document.getElementById("loader").innerHTML = "<p>❌ Camera error: " + err + "</p>";
+      });
+    } else {
+      document.getElementById("loader").innerHTML = "<p>❌ No camera found</p>";
+    }
+  }).catch(err => {
+    document.getElementById("loader").innerHTML = "<p>❌ Error accessing camera: " + err + "</p>";
+  });
+</script>
+
+</body>
+</html>

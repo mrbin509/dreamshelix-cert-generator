@@ -5,34 +5,123 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Certificate Verified | DreamsHelix</title>
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      background: #f2f6ff;
       font-family: 'Segoe UI', sans-serif;
-      text-align: center;
-      padding: 3rem 1rem;
+      background: linear-gradient(135deg, #e0f7ff, #f0f9ff);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
     }
+
+    .bubbles {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0, 179, 255, 0.3), transparent);
+      animation: float 10s infinite ease-in-out;
+      opacity: 0.5;
+    }
+
+    .bubble:nth-child(1) {
+      width: 140px;
+      height: 140px;
+      top: 20%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .bubble:nth-child(2) {
+      width: 100px;
+      height: 100px;
+      bottom: 20%;
+      right: 15%;
+      animation-delay: 3s;
+    }
+
+    .bubble:nth-child(3) {
+      width: 180px;
+      height: 180px;
+      top: 10%;
+      right: 20%;
+      animation-delay: 5s;
+    }
+
+    .bubble:nth-child(4) {
+      width: 120px;
+      height: 120px;
+      bottom: 15%;
+      left: 40%;
+      animation-delay: 2s;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px) scale(1);
+        opacity: 0.4;
+      }
+      50% {
+        transform: translateY(-40px) scale(1.1);
+        opacity: 0.8;
+      }
+    }
+
     .card {
-      background: #fff;
-      max-width: 600px;
-      margin: 2rem auto;
-      padding: 2rem;
+      position: relative;
+      z-index: 1;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      max-width: 550px;
+      width: 90%;
+      padding: 2.5rem;
       border-radius: 20px;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      text-align: center;
+      box-shadow: 0 0 30px rgba(0, 179, 255, 0.2);
+      animation: glow 4s infinite;
     }
+
+    @keyframes glow {
+      0%, 100% {
+        box-shadow: 0 0 30px rgba(0, 179, 255, 0.2);
+      }
+      50% {
+        box-shadow: 0 0 45px rgba(0, 179, 255, 0.4);
+      }
+    }
+
     img.logo {
-      max-width: 150px;
-      margin-bottom: 1rem;
+      max-width: 130px;
+      margin-bottom: 1.2rem;
     }
-    h1 {
+
+    h2 {
+      font-size: 1.9rem;
       color: #2c7be5;
-      margin-bottom: 0.5rem;
+      margin-bottom: 1.2rem;
     }
+
     p {
       font-size: 1.1rem;
+      color: #333;
       margin: 0.5rem 0;
     }
+
     .cert-id {
-      background: #edf2fa;
+      background: #e3f1ff;
       display: inline-block;
       padding: 0.5rem 1rem;
       border-radius: 8px;
@@ -43,18 +132,26 @@
   </style>
 </head>
 <body>
-<div class="card">
-<<<<<<< HEAD
+
+  <!-- Animated Background -->
+  <div class="bubbles">
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+  </div>
+
+  <!-- Certificate Card -->
+  <div class="card">
     <img class="logo" src="Dreams.jpg" alt="DreamsHelix Logo" />
-=======
-    <img class="logo" src="" alt="DreamsHelix Logo" />
->>>>>>> d226dedd1e0d23663a46f1add88500cc8098ed2d
     <h2>✅ Certificate Verified</h2>
     <p><strong>Name:</strong> {{ row["Name"] }}</p>
     <p><strong>Course:</strong> {{ row["Course"] }}</p>
     <p><strong>Batch:</strong> {{ row["Batch"] }}</p>
     <p><strong>Issued On:</strong> {{ row["Issue Date"] }}</p>
     <p><strong>Status:</strong> {{ row["Status"] }}</p>
-</div>
+    <div class="cert-id">Certificate ID: {{ row["CertificateID"] }}</div>
+  </div>
+
 </body>
 </html>

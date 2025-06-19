@@ -15,25 +15,9 @@ sheet = client.open("DreamsHelix Certificates").sheet1
 def loading():
     return render_template("loading.html")
 
-#@app.route('/home')
-#def home():
-#   return render_template("scanner.html")  # new template for QR scanner
-
-@app.route('/home', methods=['POST'])  # Must allow POST
+@app.route('/home')
 def home():
-    #cert_id = request.form.get('cert_id')
-    cert_id = request.args.get("cert_id")
-    data = sheet.get_all_records()  # moved inside for freshness
-    # Replace this with actual logic to look up certificate
-    for row in data:
-        if row['Certificate ID']== cert_id:
-            message = f"✅ Certificate ID <b>{cert_id}</b> is valid!"
-            status = "success"
-        else:
-            message = f"❌ Certificate ID <b>{cert_id}</b> not found."
-            status = "error"
-    
-    return render_template('scanner.html', message=message, status=status)
+   return render_template("scanner.html")  # new template for QR scanner
 
 @app.route('/verify')
 def verify():

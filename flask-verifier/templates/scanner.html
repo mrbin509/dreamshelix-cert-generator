@@ -149,7 +149,8 @@
   function startQRScanner() {
     const qrBox = document.getElementById("qr-reader");
     qrBox.style.display = "block";
-    qrBox.innerHTML = ""; // Clear old scans
+    qrBox.innerHTML = ""; // Clear previous scans
+
     const html5QrCode = new Html5Qrcode("qr-reader");
     const config = { fps: 10, qrbox: 250 };
 
@@ -157,20 +158,43 @@
       { facingMode: "environment" },
       config,
       qrCodeMessage => {
-        html5QrCode.stop().then(() => {
-          window.location.href = `/verify?cert_id=${encodeURIComponent(qrCodeMessage)}`;
-        }).catch(err => {
-          qrBox.innerHTML = "❌ Failed to stop camera after scan.";
-        });
+        console.log("Scanned QR content:", qrCodeMessage);
+        
+        let cert_id = qrCodeMessage.trim();
+
+        // If full URL is scanned, extract cert_id from it
+        if (cert_id.includes("cert_id=")) {
+          try {
+            const url = new URL(cert_id);
+            const params = new URLSearchParams(url.search);
+            cert_id = params.get("cert_id");
+          } catch (e) {
+            console.error("Invalid QR URL format");
+            alert("⚠️ Invalid QR format. Please try again.");
+            return;
+          }
+        }
+
+        if (cert_id) {
+          cert_id = cert_id.trim().toUpperCase();
+          html5QrCode.stop().then(() => {
+            window.location.href = `/verify?cert_id=${encodeURIComponent(cert_id)}`;
+          }).catch(err => {
+            qrBox.innerHTML = "❌ Failed to stop camera.";
+          });
+        } else {
+          alert("❌ QR code does not contain a valid cert ID.");
+        }
       },
       errorMessage => {
-        // Optionally show scanning attempt status here
+        // Ignored: scanning is in progress
       }
     ).catch(err => {
       qrBox.innerHTML = "❌ Camera access denied or unavailable.";
     });
   }
 </script>
+
 
 </body>
 </html>

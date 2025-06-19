@@ -24,6 +24,6 @@ def verify():
     cert_id = request.args.get("cert_id")
     data = sheet.get_all_records()  # moved inside for freshness
     for row in data:
-        if row['Certificate ID'] == cert_id.strip():
+        if row['Certificate ID'] == cert_id:
             return render_template("verified.html", row=row)
     return render_template("not_found.html")

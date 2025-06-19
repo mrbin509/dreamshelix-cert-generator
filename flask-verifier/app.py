@@ -20,7 +20,7 @@ def loading():
  #   return render_template("scanner.html")  # new template for QR scanner
 
 @app.route('/home')
-def verify():
+def home():
     cert_id = request.args.get("cert_id")
     data = sheet.get_all_records()  # moved inside for freshness
     for row in data:

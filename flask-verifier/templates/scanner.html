@@ -1,116 +1,255 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>DreamsHelix Certificate QR Scanner</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DreamsHelix | Certificate Verification</title>
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #f3f4f6;
       margin: 0;
       padding: 0;
       text-align: center;
+      background: linear-gradient(130deg, #0d0d0d, #1b0033);
+      color: white;
+      overflow-x: hidden;
     }
 
     header {
-      background-color: #4A148C;
-      color: white;
+      background: #00bfff;
+      color: #fff;
       padding: 20px;
-      font-size: 24px;
-      font-weight: bold;
+      font-size: 28px;
+      box-shadow: 0 0 20px #00bfff;
+      animation: glowPulse 2s infinite;
+    }
+
+    @keyframes glowPulse {
+      0% { box-shadow: 0 0 8px #00bfff; }
+      50% { box-shadow: 0 0 25px #fff, 0 0 45px #00bfff; }
+      100% { box-shadow: 0 0 8px #00bfff; }
     }
 
     .container {
+      max-width: 550px;
+      margin: 40px auto;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 20px;
       padding: 30px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.2), 0 0 45px #6600cc;
+      transition: 0.3s ease;
     }
 
-    #qr-section {
-      margin-top: 20px;
-      background: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      padding: 20px;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
+    h2 {
+      color: #ffc400;
+      margin-bottom: 20px;
+    }
+
+    .scanner-touch {
+      width: 220px;
+      height: 220px;
+      background: #0f0026;
+      border: 2px dashed #ffc400;
+      border-radius: 20px;
+      margin: 20px auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #ffc400;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 0 15px #ffc400;
+      animation: scannerGlow 2s infinite alternate;
+    }
+
+    @keyframes scannerGlow {
+      from {
+        box-shadow: 0 0 10px #ffc400, 0 0 5px #ffffff10;
+      }
+      to {
+        box-shadow: 0 0 25px #ffc400, 0 0 15px #ffffff50;
+      }
     }
 
     #reader {
       width: 100%;
-      max-width: 400px;
+      max-width: 320px;
       margin: 20px auto;
+      display: none;
+      border: 2px solid #ffc400;
+      border-radius: 12px;
+      box-shadow: 0 0 25px #ffc400;
+    }
+
+    input[type="text"] {
+      padding: 12px;
+      width: 80%;
+      font-size: 16px;
+      border: 1px solid #aaa;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      background: #ffc400;
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: 0.3s ease-in-out;
+      box-shadow: 0 0 10px #ffc400;
+    }
+
+    button:hover {
+      background: #fff;
+      color: #000;
+    }
+
+    #result {
+      margin-top: 20px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 12px;
+      display: none;
+      animation: resultGlow 2s infinite alternate;
+      box-shadow: 0 0 20px #00ffcc, 0 0 30px #00ffcc50;
+    }
+
+    @keyframes resultGlow {
+      from {
+        box-shadow: 0 0 15px #00ffcc, 0 0 8px #00ffcc33;
+      }
+      to {
+        box-shadow: 0 0 25px #00ffcc, 0 0 15px #00ffcc99;
+      }
+    }
+
+    .close-scan {
+      margin-top: 10px;
+      color: #ffc400;
+      font-size: 14px;
+      text-decoration: underline;
+      cursor: pointer;
       display: none;
     }
 
-    #loader {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 200px;
-    }
-
-    .spinner {
-      width: 60px;
-      height: 60px;
-      border: 6px solid #ddd;
-      border-top-color: #4A148C;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
+    footer {
+      margin-top: 40px;
+      padding: 20px 10px;
+      background: linear-gradient(90deg, #2c005f, #0066cc);
+      color: #fff;
+      font-size: 14px;
+      text-align: center;
+      box-shadow: 0 0 25px #00bfff;
+      border-top: 2px solid #00bfff;
     }
   </style>
 </head>
 <body>
 
-<header>DreamsHelix Certificate Verification</header>
+<header>✨ DreamsHelix Certificate Verification</header>
 
 <div class="container">
-  <section id="qr-section">
-    <h2>📷 QR Scanner</h2>
-    <p>Allow camera access and scan your certificate QR code.</p>
+  <h2>📷 Tap to Scan QR</h2>
+  <div class="scanner-touch" id="start-scan">
+    🔍 Tap to Start Camera
+  </div>
 
-    <!-- Custom loader shown before scanner starts -->
-    <div id="loader">
-      <div class="spinner"></div>
-    </div>
+  <div id="reader"></div>
+  <div class="close-scan" id="stop-scan">❌ Stop Scanner</div>
 
-    <!-- QR Scanner camera view -->
-    <div id="reader"></div>
-  </section>
+  <h2>✍ Enter Certificate ID</h2>
+  <input type="text" id="cert-input" placeholder="Enter Certificate ID"/>
+  <br/>
+  <button onclick="manualSearch()">Search</button>
+
+  <div id="result"></div>
 </div>
 
-<script>
-  function onScanSuccess(decodedText) {
-    // Redirect to the verification route
-    window.location.href = /verify?cert_id=${decodedText.trim()};
-  }
+<!-- 🌟 FOOTER SECTION -->
+<footer>
+  <p>For any querry - support@dreamshelix.com</p>
+  <p>Contact Us - +91 7978374563</p>
+  <p>© 2025 DreamsHelix. All rights reserved.</p>
+</footer>
 
+<script>
+  let scannerStarted = false;
   const html5QrCode = new Html5Qrcode("reader");
 
-  Html5Qrcode.getCameras().then(cameras => {
-    if (cameras && cameras.length) {
-      html5QrCode.start(
-        { facingMode: "environment" },
-        { fps: 10, qrbox: 250 },
-        onScanSuccess
-      ).then(() => {
-        // Hide loader and show scanner when ready
-        document.getElementById("loader").style.display = "none";
-        document.getElementById("reader").style.display = "block";
-      }).catch(err => {
-        document.getElementById("loader").innerHTML = "<p>❌ Camera error: " + err + "</p>";
-      });
-    } else {
-      document.getElementById("loader").innerHTML = "<p>❌ No camera found</p>";
-    }
-  }).catch(err => {
-    document.getElementById("loader").innerHTML = "<p>❌ Error accessing camera: " + err + "</p>";
+  function showResult(certId) {
+    const resultBox = document.getElementById("result");
+
+    resultBox.innerHTML = `
+      <strong>🎓 Certificate Details</strong><br><br>
+      ✅ <b>Certificate ID:</b> ${certId}<br>
+      🧑‍🎓 <b>Name:</b> Dynamic Name<br>
+      📚 <b>Course:</b> Python & Web Dev<br>
+      📅 <b>Issued On:</b> 2025-06-15
+    `;
+    resultBox.style.display = 'block';
+  }
+
+  function manualSearch() {
+    const id = document.getElementById("cert-input").value.trim();
+    if (id) showResult(id);
+  }
+
+  function onScanSuccess(decodedText, decodedResult) {
+    if (!scannerStarted) return;
+    html5QrCode.stop().then(() => {
+      document.getElementById("reader").style.display = "none";
+      document.getElementById("stop-scan").style.display = "none";
+      scannerStarted = false;
+      showResult(decodedText.trim());
+    }).catch(err => {
+      alert("❌ Could not stop scanner: " + err);
+    });
+  }
+
+  document.getElementById("start-scan").addEventListener("click", () => {
+    if (scannerStarted) return;
+    Html5Qrcode.getCameras().then(cameras => {
+      if (cameras && cameras.length) {
+        const cameraId = cameras[0].id;
+        html5QrCode.start(
+          cameraId,
+          { fps: 10, qrbox: { width: 200, height: 200 } },
+          onScanSuccess
+        ).then(() => {
+          document.getElementById("reader").style.display = "block";
+          document.getElementById("stop-scan").style.display = "inline";
+          scannerStarted = true;
+        }).catch(err => {
+          alert("❌ Error starting scanner: " + err);
+        });
+      } else {
+        alert("❌ No camera found");
+      }
+    }).catch(err => {
+      alert("❌ Camera access error: " + err);
+    });
+  });
+
+  document.getElementById("stop-scan").addEventListener("click", () => {
+    if (!scannerStarted) return;
+    html5QrCode.stop().then(() => {
+      document.getElementById("reader").style.display = "none";
+      document.getElementById("stop-scan").style.display = "none";
+      scannerStarted = false;
+    }).catch(err => {
+      alert("❌ Error stopping scanner: " + err);
+    });
   });
 </script>
 

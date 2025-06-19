@@ -143,14 +143,14 @@
 
   <!-- Certificate Card -->
   <div class="card">
-    <img class="logo" src="Dreams.jpg" alt="DreamsHelix Logo" />
+    <img class="logo" src="{{ url_for('static', filename='Dreams.jpg') }}" alt="DreamsHelix Logo" />
     <h2>✅ Certificate Verified</h2>
     <p><strong>Name:</strong> {{ row["Name"] }}</p>
     <p><strong>Course:</strong> {{ row["Course"] }}</p>
     <p><strong>Batch:</strong> {{ row["Batch"] }}</p>
     <p><strong>Issued On:</strong> {{ row["Issue Date"] }}</p>
     <p><strong>Status:</strong> {{ row["Status"] }}</p>
-    <div class="cert-id">Certificate ID: {{ row["CertificateID"] }}</div>
+    <div class="cert-id">Certificate ID: {{ row["Certificate ID"] }}</div>
   </div>
 
 </body>

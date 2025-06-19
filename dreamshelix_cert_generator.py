@@ -21,7 +21,7 @@ client = gspread.authorize(creds)
 sheet = client.open(GOOGLE_SHEET_NAME).sheet1
 data = sheet.get_all_records()
 
-# === GENERATE CERTIFICATE ID ===
+# === CERTIFICATE ID FORMAT ===
 def generate_cert_id(index):
     return f"DH-PWD-{str(index).zfill(5)}"
 
@@ -33,40 +33,40 @@ def generate_qr(cert_id):
     img.save(path)
     return path
 
-# === PDF GENERATOR CLASS ===
+# === PDF CLASS ===
 class CertificatePDF(FPDF):
     def header(self):
         pass
     def footer(self):
         pass
 
-# === GENERATE CERTIFICATE PDF ===
+# === CERTIFICATE GENERATION ===
 def generate_certificate_pdf(name, cert_id, qr_path):
-    pdf = CertificatePDF(orientation='L', unit='pt', format=[1280, 904])
+    # True A4 landscape in points
+    pdf = CertificatePDF(orientation='L', unit='pt', format='A4')
     pdf.add_page()
 
-    # Background template
-    pdf.image(CERT_TEMPLATE, x=0, y=0, w=1280, h=904)
+    # A4 Landscape = 842pt × 595pt
+    pdf.image(CERT_TEMPLATE, x=0, y=0, w=842, h=595)
 
-    # Add Fonts
+    # === Fonts ===
     pdf.add_font('GreatVibes', '', 'GreatVibes-Regular.ttf', uni=True)
     pdf.add_font('Poppins', '', 'Poppins-Regular.ttf', uni=True)
 
-    # === Name (Below "This is to certify that") ===
-    pdf.set_font('GreatVibes', '', 60)  # Larger elegant font
-    name_y = 365  # Positioned just below "This is to certify that"
-    pdf.set_xy(0, name_y)
-    pdf.cell(1280, 60, name, align='C')
+    # === NAME (below “This is to certify that”) ===
+    pdf.set_font('GreatVibes', '', 48)
+    pdf.set_xy(0, 240)  # Y = slightly below "This is to certify that"
+    pdf.cell(842, 40, name, align='C')
 
-    # === Certificate ID (inside "Certificate ID - ____________") ===
-    pdf.set_font('Poppins', '', 14)
-    cert_id_x = 165  # Position near the line start
-    cert_id_y = 90
+    # === CERTIFICATE ID (right of "Certificate ID -") ===
+    pdf.set_font('Poppins', '', 12)
+    cert_id_x = 170  # Right after "Certificate ID -"
+    cert_id_y = 75
     pdf.set_xy(cert_id_x, cert_id_y)
-    pdf.cell(300, 20, cert_id)
+    pdf.cell(300, 15, cert_id)
 
-    # === QR Code (bottom-left) ===
-    pdf.image(qr_path, x=40, y=770, w=80, h=80)
+    # === QR Code ===
+    pdf.image(qr_path, x=30, y=480, w=60, h=60)
 
     # Save PDF
     pdf_path = f"certificates/{cert_id}.pdf"

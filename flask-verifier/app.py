@@ -10,6 +10,11 @@ creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", sco
 client = gspread.authorize(creds)
 sheet = client.open("DreamsHelix Certificates").sheet1
 
+# Show loading screen first
+@app.route("/")
+def loading():
+    return render_template("loading.html")
+
 @app.route('/')
 def home():
     return render_template("scanner.html")  # new template for QR scanner

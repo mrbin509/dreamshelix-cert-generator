@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DreamsHelix | Loading...</title>
+  <meta http-equiv="refresh" content="3;url=/home">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      background-color: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .loader {
+      width: 80px;
+      height: 80px;
+      border: 8px solid #6a00ff;
+      border-top: 8px solid #00ffc8;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 25px;
+    }
+
+    @keyframes spin {
+      0%   { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    h1 {
+      color: white;
+      font-size: 1.5rem;
+      animation: fadeIn 1s ease-in-out infinite alternate;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0.5; }
+      to   { opacity: 1; }
+    }
+
+    .brand {
+      color: #00ffc8;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="loader"></div>
+  <h1><span class="brand">DreamsHelix</span> is Launching...</h1>
+
+</body>
+</html>

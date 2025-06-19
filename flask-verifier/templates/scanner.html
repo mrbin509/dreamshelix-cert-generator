@@ -6,10 +6,6 @@
   <title>DreamsHelix | Certificate Verification</title>
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       font-family: 'Segoe UI', sans-serif;
       margin: 0;
@@ -17,72 +13,50 @@
       text-align: center;
       background: linear-gradient(130deg, #0d0d0d, #1b0033);
       color: white;
-      overflow-x: hidden;
     }
 
     header {
       background: #00bfff;
-      color: #fff;
       padding: 20px;
       font-size: 28px;
       box-shadow: 0 0 20px #00bfff;
-      animation: glowPulse 2s infinite;
-    }
-
-    @keyframes glowPulse {
-      0% { box-shadow: 0 0 8px #00bfff; }
-      50% { box-shadow: 0 0 25px #fff, 0 0 45px #00bfff; }
-      100% { box-shadow: 0 0 8px #00bfff; }
     }
 
     .container {
-      max-width: 550px;
+      max-width: 600px;
       margin: 40px auto;
-      background: rgba(0, 0, 0, 0.3);
-      border-radius: 20px;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 16px;
       padding: 30px;
-      backdrop-filter: blur(8px);
-      box-shadow: 0 0 25px rgba(255, 255, 255, 0.2), 0 0 45px #6600cc;
-      transition: 0.3s ease;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.2), 0 0 40px #6600cc;
     }
 
     h2 {
       color: #ffc400;
-      margin-bottom: 20px;
     }
 
-    .scanner-touch {
-      width: 220px;
-      height: 220px;
-      background: #0f0026;
-      border: 2px dashed #ffc400;
-      border-radius: 20px;
+    .scanner-area {
       margin: 20px auto;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #ffc400;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.3s;
+      max-width: 340px;
+      padding: 10px;
+      background: #ffffff;
+      border-radius: 12px;
       box-shadow: 0 0 15px #ffc400;
-      animation: scannerGlow 2s infinite alternate;
-    }
-
-    @keyframes scannerGlow {
-      from { box-shadow: 0 0 10px #ffc400, 0 0 5px #ffffff10; }
-      to { box-shadow: 0 0 25px #ffc400, 0 0 15px #ffffff50; }
     }
 
     #reader {
       width: 100%;
-      max-width: 340px;
-      margin: 20px auto;
-      background: #fff; /* White background for camera visibility */
-      padding: 12px;
-      border-radius: 16px;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .close-scan {
+      margin-top: 10px;
+      color: #ffc400;
+      text-decoration: underline;
+      cursor: pointer;
       display: none;
-      box-shadow: 0 0 20px #ffc400;
     }
 
     input[type="text"] {
@@ -102,53 +76,24 @@
       font-size: 16px;
       border-radius: 10px;
       cursor: pointer;
-      margin-top: 10px;
-      transition: 0.3s ease-in-out;
       box-shadow: 0 0 10px #ffc400;
-    }
-
-    button:hover {
-      background: #fff;
-      color: #000;
     }
 
     #result {
       margin-top: 20px;
       padding: 20px;
-      background: rgba(255, 255, 255, 0.07);
+      background: rgba(255, 255, 255, 0.1);
       border-radius: 12px;
       display: none;
-      animation: resultGlow 2s infinite alternate;
-      box-shadow: 0 0 20px #00ffcc, 0 0 30px #00ffcc50;
-    }
-
-    @keyframes resultGlow {
-      from {
-        box-shadow: 0 0 15px #00ffcc, 0 0 8px #00ffcc33;
-      }
-      to {
-        box-shadow: 0 0 25px #00ffcc, 0 0 15px #00ffcc99;
-      }
-    }
-
-    .close-scan {
-      margin-top: 10px;
-      color: #ffc400;
-      font-size: 14px;
-      text-decoration: underline;
-      cursor: pointer;
-      display: none;
+      box-shadow: 0 0 15px #00ffcc;
     }
 
     footer {
       margin-top: 40px;
-      padding: 20px 10px;
+      padding: 15px;
       background: linear-gradient(90deg, #2c005f, #0066cc);
-      color: #fff;
       font-size: 14px;
-      text-align: center;
-      box-shadow: 0 0 25px #00bfff;
-      border-top: 2px solid #00bfff;
+      color: #fff;
     }
   </style>
 </head>
@@ -157,13 +102,16 @@
 <header>✨ DreamsHelix Certificate Verification</header>
 
 <div class="container">
-  <h2>📷 Tap to Scan QR</h2>
-  <div class="scanner-touch" id="start-scan">🔍 Tap to Start Camera</div>
+  <h2>📷 Scan Your Certificate QR</h2>
 
-  <div id="reader"></div>
+  <!-- Camera Feed Area -->
+  <div class="scanner-area">
+    <div id="reader"></div>
+  </div>
+
   <div class="close-scan" id="stop-scan">❌ Stop Scanner</div>
 
-  <h2>✍ Enter Certificate ID</h2>
+  <h2>✍ Or Enter Certificate ID</h2>
   <input type="text" id="cert-input" placeholder="Enter Certificate ID"/>
   <br/>
   <button onclick="manualSearch()">Search</button>
@@ -182,7 +130,6 @@
 
   function showResult(certId) {
     const resultBox = document.getElementById("result");
-
     resultBox.innerHTML = `
       <strong>🎓 Certificate Details</strong><br><br>
       ✅ <b>Certificate ID:</b> ${certId}<br>
@@ -198,10 +145,9 @@
     if (id) showResult(id);
   }
 
-  function onScanSuccess(decodedText, decodedResult) {
+  function onScanSuccess(decodedText) {
     if (!scannerStarted) return;
     html5QrCode.stop().then(() => {
-      document.getElementById("reader").style.display = "none";
       document.getElementById("stop-scan").style.display = "none";
       scannerStarted = false;
       showResult(decodedText.trim());
@@ -210,17 +156,15 @@
     });
   }
 
-  document.getElementById("start-scan").addEventListener("click", () => {
-    if (scannerStarted) return;
+  // Start QR scanner immediately on page load
+  window.onload = function() {
     Html5Qrcode.getCameras().then(cameras => {
       if (cameras && cameras.length) {
-        const cameraId = cameras[0].id;
         html5QrCode.start(
-          cameraId,
+          cameras[0].id,
           { fps: 10, qrbox: { width: 250, height: 250 } },
           onScanSuccess
         ).then(() => {
-          document.getElementById("reader").style.display = "block";
           document.getElementById("stop-scan").style.display = "inline";
           scannerStarted = true;
         }).catch(err => {
@@ -232,12 +176,11 @@
     }).catch(err => {
       alert("❌ Camera access error: " + err);
     });
-  });
+  };
 
   document.getElementById("stop-scan").addEventListener("click", () => {
     if (!scannerStarted) return;
     html5QrCode.stop().then(() => {
-      document.getElementById("reader").style.display = "none";
       document.getElementById("stop-scan").style.display = "none";
       scannerStarted = false;
     }).catch(err => {

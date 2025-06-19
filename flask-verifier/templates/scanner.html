@@ -1,193 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>DreamsHelix | Certificate Verification</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DreamsHelix Certificate Verification</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-      background: linear-gradient(130deg, #0d0d0d, #1b0033);
-      color: white;
-    }
-
-    header {
-      background: #00bfff;
-      padding: 20px;
-      font-size: 28px;
-      box-shadow: 0 0 20px #00bfff;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: 40px auto;
-      background: rgba(0, 0, 0, 0.4);
-      border-radius: 16px;
-      padding: 30px;
-      backdrop-filter: blur(6px);
-      box-shadow: 0 0 25px rgba(255, 255, 255, 0.2), 0 0 40px #6600cc;
-    }
-
-    h2 {
-      color: #ffc400;
-    }
-
-    .scanner-area {
-      margin: 20px auto;
-      max-width: 340px;
-      padding: 10px;
-      background: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 0 15px #ffc400;
-    }
-
-    #reader {
-      width: 100%;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    .close-scan {
-      margin-top: 10px;
-      color: #ffc400;
-      text-decoration: underline;
-      cursor: pointer;
-      display: none;
-    }
-
-    input[type="text"] {
-      padding: 12px;
-      width: 80%;
-      font-size: 16px;
-      border: 1px solid #aaa;
-      border-radius: 10px;
-      margin-bottom: 10px;
-    }
-
-    button {
-      background: #ffc400;
-      color: #000;
-      border: none;
-      padding: 10px 20px;
-      font-size: 16px;
-      border-radius: 10px;
-      cursor: pointer;
-      box-shadow: 0 0 10px #ffc400;
-    }
-
-    #result {
-      margin-top: 20px;
-      padding: 20px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      display: none;
-      box-shadow: 0 0 15px #00ffcc;
-    }
-
-    footer {
-      margin-top: 40px;
-      padding: 15px;
-      background: linear-gradient(90deg, #2c005f, #0066cc);
-      font-size: 14px;
-      color: #fff;
-    }
-  </style>
 </head>
 <body>
+  <div class="container">
+    <img src="/static/dreamshelix-logo.png" alt="DreamsHelix Logo" class="logo">
 
-<header>✨ DreamsHelix Certificate Verification</header>
+    <h1>🔍 DreamsHelix Certificate Verification</h1>
+    <p class="sub-heading">Enter or Scan your Certificate ID to verify its authenticity.</p>
 
-<div class="container">
-  <h2>📷 Scan Your Certificate QR</h2>
+    <form method="post" action="/verify" onsubmit="showLoader()">
+      <input type="text" name="cert_id" id="cert_id" placeholder="Enter Certificate ID" required>
+      <button type="submit">Verify</button>
+    </form>
 
-  <!-- Camera Feed Area -->
-  <div class="scanner-area">
-    <div id="reader"></div>
+    <div id="loader" class="loader" style="display: none;"></div>
+
+    <div id="qr-reader" class="qr-box"></div>
+    <button onclick="startQRScanner()">📷 Scan QR Code</button>
+
+    {% if message %}
+      <div class="result-box {{ status }}">
+        {{ message | safe }}
+      </div>
+    {% endif %}
+
+    <footer>
+      <p>© 2025 <strong>DreamsHelix EdTech Pvt. Ltd.</strong> | All Rights Reserved.</p>
+    </footer>
   </div>
 
-  <div class="close-scan" id="stop-scan">❌ Stop Scanner</div>
+  <script>
+    function showLoader() {
+      document.getElementById('loader').style.display = 'block';
+    }
 
-  <h2>✍ Or Enter Certificate ID</h2>
-  <input type="text" id="cert-input" placeholder="Enter Certificate ID"/>
-  <br/>
-  <button onclick="manualSearch()">Search</button>
+    function startQRScanner() {
+      const qrBox = document.getElementById("qr-reader");
+      qrBox.innerHTML = "";
+      const html5QrCode = new Html5Qrcode("qr-reader");
+      const config = { fps: 10, qrbox: 200 };
 
-  <div id="result"></div>
-</div>
-
-<footer>
-  <p>© 2025 DreamsHelix. All rights reserved.</p>
-  <p>Made with ❤ by DreamsHelix Team</p>
-</footer>
-
-<script>
-  let scannerStarted = false;
-  const html5QrCode = new Html5Qrcode("reader");
-
-  function showResult(certId) {
-    const resultBox = document.getElementById("result");
-    resultBox.innerHTML = `
-      <strong>🎓 Certificate Details</strong><br><br>
-      ✅ <b>Certificate ID:</b> ${certId}<br>
-      🧑‍🎓 <b>Name:</b> Dynamic Name<br>
-      📚 <b>Course:</b> Python & Web Dev<br>
-      📅 <b>Issued On:</b> 2025-06-15
-    `;
-    resultBox.style.display = 'block';
-  }
-
-  function manualSearch() {
-    const id = document.getElementById("cert-input").value.trim();
-    if (id) showResult(id);
-  }
-
-  function onScanSuccess(decodedText) {
-    if (!scannerStarted) return;
-    html5QrCode.stop().then(() => {
-      document.getElementById("stop-scan").style.display = "none";
-      scannerStarted = false;
-      showResult(decodedText.trim());
-    }).catch(err => {
-      alert("❌ Could not stop scanner: " + err);
-    });
-  }
-
-  // Start QR scanner immediately on page load
-  window.onload = function() {
-    Html5Qrcode.getCameras().then(cameras => {
-      if (cameras && cameras.length) {
-        html5QrCode.start(
-          cameras[0].id,
-          { fps: 10, qrbox: { width: 250, height: 250 } },
-          onScanSuccess
-        ).then(() => {
-          document.getElementById("stop-scan").style.display = "inline";
-          scannerStarted = true;
-        }).catch(err => {
-          alert("❌ Error starting scanner: " + err);
-        });
-      } else {
-        alert("❌ No camera found");
-      }
-    }).catch(err => {
-      alert("❌ Camera access error: " + err);
-    });
-  };
-
-  document.getElementById("stop-scan").addEventListener("click", () => {
-    if (!scannerStarted) return;
-    html5QrCode.stop().then(() => {
-      document.getElementById("stop-scan").style.display = "none";
-      scannerStarted = false;
-    }).catch(err => {
-      alert("❌ Error stopping scanner: " + err);
-    });
-  });
-</script>
-
+      html5QrCode.start(
+        { facingMode: "environment" },
+        config,
+        qrCodeMessage => {
+          document.getElementById("cert_id").value = qrCodeMessage;
+          html5QrCode.stop();
+          qrBox.innerHTML = "✅ QR Code detected!";
+        },
+        errorMessage => {
+          // Ignore scan errors silently
+        }
+      ).catch(err => {
+        qrBox.innerHTML = "❌ Camera access denied or unavailable.";
+      });
+    }
+  </script>
 </body>
 </html>

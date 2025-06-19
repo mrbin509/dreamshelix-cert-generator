@@ -15,9 +15,19 @@ sheet = client.open("DreamsHelix Certificates").sheet1
 def loading():
     return render_template("loading.html")
 
+#@app.route('/home')
+#def home():
+ #   return render_template("scanner.html")  # new template for QR scanner
+
 @app.route('/home')
-def home():
-    return render_template("scanner.html")  # new template for QR scanner
+def verify():
+    cert_id = request.args.get("cert_id")
+    data = sheet.get_all_records()  # moved inside for freshness
+    for row in data:
+        if row['Certificate ID'] == cert_id:
+            return render_template("scanner.html", row=row)
+    return render_template("scanner.html")
+
 
 @app.route('/verify')
 def verify():

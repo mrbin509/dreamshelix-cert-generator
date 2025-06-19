@@ -7,52 +7,136 @@
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap" rel="stylesheet">
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: 'Poppins', sans-serif;
-      background: #f9f9f9;
+      background: linear-gradient(135deg, #e0f7fa, #fbe9e7);
       margin: 0;
       padding: 0;
+      overflow-x: hidden;
+      position: relative;
     }
+
+    .petal {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle at center, #f48fb1 0%, transparent 70%);
+      border-radius: 50%;
+      animation: float 20s infinite ease-in-out;
+      opacity: 0.3;
+    }
+
+    .petal:nth-child(1) {
+      top: 10%;
+      left: 5%;
+      animation-delay: 0s;
+    }
+    .petal:nth-child(2) {
+      top: 40%;
+      left: 80%;
+      animation-delay: 5s;
+    }
+    .petal:nth-child(3) {
+      top: 70%;
+      left: 30%;
+      animation-delay: 10s;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-30px) rotate(180deg); }
+      100% { transform: translateY(0) rotate(360deg); }
+    }
+
     .container {
-      max-width: 480px;
-      margin: 40px auto;
-      background: #fff;
-      padding: 30px;
+      max-width: 500px;
+      margin: 60px auto;
+      background: #ffffffcc;
+      padding: 40px 30px;
       text-align: center;
-      box-shadow: 0 4px 25px rgba(0,0,0,0.1);
       border-radius: 20px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+      position: relative;
+      z-index: 10;
+      transition: transform 0.3s ease;
     }
+
+    .container:hover {
+      transform: scale(1.02);
+    }
+
     h1 {
       color: #007BFF;
-      font-size: 22px;
-      margin-bottom: 10px;
+      font-size: 24px;
+      margin-bottom: 12px;
+      text-shadow: 1px 1px #e0e0e0;
     }
+
     input[type="text"] {
       padding: 12px;
       width: 100%;
       font-size: 16px;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
       border: 1px solid #ccc;
       border-radius: 8px;
+      transition: box-shadow 0.3s ease;
     }
+
+    input[type="text"]:focus {
+      box-shadow: 0 0 8px #007BFF;
+      outline: none;
+    }
+
     button {
-      background-color: #007BFF;
+      background: linear-gradient(90deg, #007BFF, #00C6FF);
       color: #fff;
       border: none;
-      padding: 12px 18px;
+      padding: 12px 20px;
       font-size: 16px;
       border-radius: 8px;
       cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s;
     }
+
+    button:hover {
+      background: linear-gradient(90deg, #0056b3, #0099cc);
+      transform: scale(1.05);
+    }
+
     .qr-box {
-      margin: 20px auto;
+      margin: 25px auto;
     }
+
     .result {
-      margin-top: 15px;
+      margin-top: 20px;
+    }
+
+    footer {
+      margin-top: 50px;
+      text-align: center;
+      font-size: 13px;
+      color: #555;
+      background: #fff;
+      padding: 15px 0;
+      box-shadow: 0 -1px 8px rgba(0,0,0,0.1);
+    }
+
+    footer strong {
+      color: #007BFF;
     }
   </style>
 </head>
 <body>
+  <!-- Petals for animation -->
+  <div class="petal"></div>
+  <div class="petal"></div>
+  <div class="petal"></div>
+
+  <!-- Main Container -->
   <div class="container">
     <h1>🔍 Verify Your Certificate</h1>
     <form action="/verify" method="GET">
@@ -66,12 +150,18 @@
     <div class="result" id="result"></div>
   </div>
 
+  <footer>
+    <p>For any querry - support@dreamshelix.com</p>
+    <p>Contact Us - 7978374563</p>
+    <p>© 2025 <strong>DreamsHelix EdTech Pvt. Ltd.</strong> | All Rights Reserved.</p>
+  </footer>
+
   <script>
     function startQRScanner() {
       const qrBox = document.getElementById("qr-reader");
       qrBox.innerHTML = "";
       const html5QrCode = new Html5Qrcode("qr-reader");
-      const config = { fps: 10, qrbox: 200 };
+      const config = { fps: 10, qrbox: 250 };
 
       html5QrCode.start(
         { facingMode: "environment" },
@@ -82,7 +172,7 @@
           qrBox.innerHTML = "✅ QR Code detected!";
         },
         errorMessage => {
-          // ignore errors
+          // Silently ignore
         }
       ).catch(err => {
         qrBox.innerHTML = "❌ Camera access denied or unavailable.";

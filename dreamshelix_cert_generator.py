@@ -33,7 +33,7 @@ def generate_qr(cert_id):
     img.save(path)
     return path
 
-# === PDF CLASS ===
+# === PDF GENERATOR CLASS ===
 class CertificatePDF(FPDF):
     def header(self):
         pass
@@ -50,19 +50,22 @@ def generate_certificate_pdf(name, cert_id, qr_path):
 
     # Add Fonts
     pdf.add_font('GreatVibes', '', 'GreatVibes-Regular.ttf', uni=True)
-    pdf.set_font('GreatVibes', '', 50)
-    
-    # === NAME ===
-    name_y = 295  # Slightly above center
-    pdf.set_xy(0, name_y)
-    pdf.cell(1280, 50, name, align='C')
+    pdf.add_font('Helvetica', '', '', uni=True)
 
-    # === CERTIFICATE ID ===
+    # === Name (Below "This is to certify that") ===
+    pdf.set_font('GreatVibes', '', 60)  # Larger elegant font
+    name_y = 365  # Positioned just below "This is to certify that"
+    pdf.set_xy(0, name_y)
+    pdf.cell(1280, 60, name, align='C')
+
+    # === Certificate ID (inside "Certificate ID - ____________") ===
     pdf.set_font('Helvetica', '', 14)
-    pdf.set_xy(90, 87)
+    cert_id_x = 165  # Position near the line start
+    cert_id_y = 90
+    pdf.set_xy(cert_id_x, cert_id_y)
     pdf.cell(300, 20, cert_id)
 
-    # === QR Code ===
+    # === QR Code (bottom-left) ===
     pdf.image(qr_path, x=40, y=770, w=80, h=80)
 
     # Save PDF
@@ -76,13 +79,13 @@ for i, row in enumerate(data):
     email = row["Email"]
     course = row["Course"]
     batch = row["Batch"]
-    roll = row.get("Roll No", f"R{i+1:03}")  # Optional fallback
+    roll = row.get("Roll No", f"R{i+1:03}")
 
     cert_id = generate_cert_id(i + 1)
     qr_path = generate_qr(cert_id)
     pdf_path = generate_certificate_pdf(name, cert_id, qr_path)
 
-    # Update Google Sheet
+    # Update Sheet
     sheet.update_cell(i + 2, 6, cert_id)               # Certificate ID
     sheet.update_cell(i + 2, 7, str(date.today()))     # Issue Date
     sheet.update_cell(i + 2, 8, "Issued")              # Status

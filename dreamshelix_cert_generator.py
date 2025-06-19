@@ -50,7 +50,7 @@ def generate_certificate_pdf(name, cert_id, qr_path):
 
     # Add Fonts
     pdf.add_font('GreatVibes', '', 'GreatVibes-Regular.ttf', uni=True)
-    pdf.add_font('Helvetica', '', '', uni=True)
+    pdf.add_font('Arial', '', '', uni=True)
 
     # === Name (Below "This is to certify that") ===
     pdf.set_font('GreatVibes', '', 60)  # Larger elegant font
@@ -59,7 +59,7 @@ def generate_certificate_pdf(name, cert_id, qr_path):
     pdf.cell(1280, 60, name, align='C')
 
     # === Certificate ID (inside "Certificate ID - ____________") ===
-    pdf.set_font('Helvetica', '', 14)
+    pdf.set_font('Arial', '', 14)
     cert_id_x = 165  # Position near the line start
     cert_id_y = 90
     pdf.set_xy(cert_id_x, cert_id_y)

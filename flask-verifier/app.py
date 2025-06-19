@@ -17,17 +17,23 @@ def loading():
 
 #@app.route('/home')
 #def home():
- #   return render_template("scanner.html")  # new template for QR scanner
+#   return render_template("scanner.html")  # new template for QR scanner
 
-@app.route('/home')
+@app.route('/home', methods=['POST'])  # Must allow POST
 def home():
+    #cert_id = request.form.get('cert_id')
     cert_id = request.args.get("cert_id")
     data = sheet.get_all_records()  # moved inside for freshness
+    # Replace this with actual logic to look up certificate
     for row in data:
-        if row['Certificate ID'] == cert_id:
-            return render_template("scanner.html", row=row)
-    return render_template("scanner.html")
-
+        if row['Certificate ID']== cert_id:
+            message = f"✅ Certificate ID <b>{cert_id}</b> is valid!"
+            status = "success"
+        else:
+            message = f"❌ Certificate ID <b>{cert_id}</b> not found."
+            status = "error"
+    
+    return render_template('scanner.html', message=message, status=status)
 
 @app.route('/verify')
 def verify():

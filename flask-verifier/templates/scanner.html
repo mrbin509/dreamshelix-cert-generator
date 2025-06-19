@@ -1,25 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>DreamsHelix Certificate Verification</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap" rel="stylesheet" />
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background: #f8f9fa;
+      background: #f9f9f9;
       margin: 0;
       padding: 0;
-      color: #333;
     }
     .container {
-      max-width: 480px;
-      margin: 30px auto;
+      max-width: 500px;
+      margin: 40px auto;
+      background: #fff;
       padding: 30px;
-      background: #ffffff;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
       border-radius: 16px;
       text-align: center;
     }
@@ -30,11 +29,11 @@
     h1 {
       font-size: 24px;
       color: #007BFF;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
     .sub-heading {
-      font-size: 14px;
       color: #555;
+      font-size: 14px;
       margin-bottom: 25px;
     }
     form {
@@ -42,29 +41,23 @@
     }
     input[type="text"] {
       width: 100%;
-      padding: 12px 15px;
-      margin-bottom: 10px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
+      padding: 12px;
       font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 15px;
     }
     button {
       background-color: #007BFF;
-      color: white;
+      color: #fff;
       padding: 12px 20px;
       font-size: 16px;
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
     }
     button:hover {
       background-color: #0056b3;
-    }
-    .qr-box {
-      margin: 20px auto;
-      max-width: 100%;
-      border-radius: 10px;
     }
     .loader {
       border: 4px solid #f3f3f3;
@@ -74,15 +67,19 @@
       height: 30px;
       animation: spin 1s linear infinite;
       margin: 10px auto;
+      display: none;
     }
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+    .qr-box {
+      margin: 20px auto;
+    }
     .result-box {
+      margin-top: 20px;
       padding: 15px;
-      margin-top: 15px;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 15px;
     }
     .success {
@@ -96,33 +93,33 @@
       border: 1px solid #f5c6cb;
     }
     footer {
-      font-size: 12px;
-      color: #777;
       margin-top: 30px;
+      font-size: 13px;
+      color: #777;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <img src="/static/dreamshelix-logo.png" alt="DreamsHelix Logo" class="logo">
+    <img src="/static/dreamshelix-logo.png" alt="DreamsHelix Logo" class="logo" />
 
     <h1>🔍 DreamsHelix Certificate Verification</h1>
     <p class="sub-heading">Enter or Scan your Certificate ID to verify its authenticity.</p>
 
-    <form method="post" action="/verify" onsubmit="showLoader()">
-      <input type="text" name="cert_id" id="cert_id" placeholder="Enter Certificate ID" required>
+    <form method="POST" action="/verify" onsubmit="showLoader()">
+      <input type="text" name="cert_id" id="cert_id" placeholder="Enter Certificate ID" required />
       <button type="submit">Verify</button>
     </form>
 
-    <div id="loader" class="loader" style="display: none;"></div>
+    <div id="loader" class="loader"></div>
 
     <div id="qr-reader" class="qr-box"></div>
     <button onclick="startQRScanner()">📷 Scan QR Code</button>
 
     {% if message %}
-      <div class="result-box {{ status }}">
-        {{ message | safe }}
-      </div>
+    <div class="result-box {{ status }}">
+      {{ message | safe }}
+    </div>
     {% endif %}
 
     <footer>
@@ -150,7 +147,7 @@
           qrBox.innerHTML = "✅ QR Code detected!";
         },
         errorMessage => {
-          // Silent error
+          // silently ignore errors
         }
       ).catch(err => {
         qrBox.innerHTML = "❌ Camera access denied or unavailable.";

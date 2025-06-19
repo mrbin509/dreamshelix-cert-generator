@@ -60,7 +60,7 @@ def generate_certificate_pdf(name, cert_id, qr_path):
 
     # === CERTIFICATE ID (right of "Certificate ID -") ===
     pdf.set_font('Poppins', '', 12)
-    cert_id_x = 155  # Right after "Certificate ID -"
+    cert_id_x = 147  # Right after "Certificate ID -"
     cert_id_y = 168
     pdf.set_xy(cert_id_x, cert_id_y)
     pdf.cell(200, 20, cert_id)

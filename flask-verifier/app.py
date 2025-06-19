@@ -15,7 +15,7 @@ sheet = client.open("DreamsHelix Certificates").sheet1
 def loading():
     return render_template("loading.html")
 
-@app.route('/')
+@app.route('/home')
 def home():
     return render_template("scanner.html")  # new template for QR scanner
 

@@ -2,182 +2,216 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>DreamsHelix | Certificate Scanner</title>
+  <title>DreamsHelix | Certificate Verification System</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+
   <style>
     * {
       box-sizing: border-box;
     }
 
     body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #e0f7fa, #fbe9e7);
+      font-family: 'Segoe UI', sans-serif;
       margin: 0;
       padding: 0;
+      text-align: center;
+      background: linear-gradient(130deg, #0d0d0d, #1b0033);
+      color: white;
       overflow-x: hidden;
-      position: relative;
     }
 
-    .petal {
-      position: absolute;
-      width: 100px;
-      height: 100px;
-      background: radial-gradient(circle at center, #f48fb1 0%, transparent 70%);
-      border-radius: 50%;
-      animation: float 20s infinite ease-in-out;
-      opacity: 0.3;
+    header {
+      background: #00bfff;
+      color: #fff;
+      padding: 20px;
+      font-size: 28px;
+      box-shadow: 0 0 20px #00bfff;
+      animation: glowPulse 2s infinite;
     }
 
-    .petal:nth-child(1) {
-      top: 10%;
-      left: 5%;
-      animation-delay: 0s;
-    }
-    .petal:nth-child(2) {
-      top: 40%;
-      left: 80%;
-      animation-delay: 5s;
-    }
-    .petal:nth-child(3) {
-      top: 70%;
-      left: 30%;
-      animation-delay: 10s;
-    }
-
-    @keyframes float {
-      0% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-30px) rotate(180deg); }
-      100% { transform: translateY(0) rotate(360deg); }
+    @keyframes glowPulse {
+      0% { box-shadow: 0 0 8px #00bfff; }
+      50% { box-shadow: 0 0 25px #fff, 0 0 45px #00bfff; }
+      100% { box-shadow: 0 0 8px #00bfff; }
     }
 
     .container {
-      max-width: 500px;
-      margin: 60px auto;
-      background: #ffffffcc;
-      padding: 40px 30px;
-      text-align: center;
+      max-width: 550px;
+      margin: 40px auto;
+      background: rgba(0, 0, 0, 0.3);
       border-radius: 20px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-      position: relative;
-      z-index: 10;
-      transition: transform 0.3s ease;
+      padding: 30px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.2), 0 0 45px #6600cc;
+      transition: 0.3s ease;
     }
 
-    .container:hover {
-      transform: scale(1.02);
+    h2 {
+      color: #ffc400;
+      margin-bottom: 20px;
     }
 
-    h1 {
-      color: #007BFF;
-      font-size: 24px;
-      margin-bottom: 12px;
-      text-shadow: 1px 1px #e0e0e0;
+    .scanner-touch {
+      width: 220px;
+      height: 220px;
+      background: #0f0026;
+      border: 2px dashed #ffc400;
+      border-radius: 20px;
+      margin: 20px auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #ffc400;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 0 15px #ffc400;
+      animation: scannerGlow 2s infinite alternate;
+    }
+
+    @keyframes scannerGlow {
+      from {
+        box-shadow: 0 0 10px #ffc400, 0 0 5px #ffffff10;
+      }
+      to {
+        box-shadow: 0 0 25px #ffc400, 0 0 15px #ffffff50;
+      }
+    }
+
+    #reader {
+      width: 100%;
+      max-width: 320px;
+      margin: 20px auto;
+      display: none;
+      border: 2px solid #ffc400;
+      border-radius: 12px;
+      box-shadow: 0 0 25px #ffc400;
     }
 
     input[type="text"] {
       padding: 12px;
-      width: 100%;
+      width: 80%;
       font-size: 16px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      transition: box-shadow 0.3s ease;
-    }
-
-    input[type="text"]:focus {
-      box-shadow: 0 0 8px #007BFF;
-      outline: none;
+      border: 1px solid #aaa;
+      border-radius: 10px;
+      margin-bottom: 10px;
     }
 
     button {
-      background: linear-gradient(90deg, #007BFF, #00C6FF);
-      color: #fff;
+      background: #ffc400;
+      color: #000;
       border: none;
-      padding: 12px 20px;
+      padding: 10px 20px;
       font-size: 16px;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
-      transition: background 0.3s ease, transform 0.2s;
+      margin-top: 10px;
+      transition: 0.3s ease-in-out;
+      box-shadow: 0 0 10px #ffc400;
     }
 
     button:hover {
-      background: linear-gradient(90deg, #0056b3, #0099cc);
-      transform: scale(1.05);
+      background: #fff;
+      color: #000;
     }
 
-    .qr-box {
-      margin: 25px auto;
-    }
-
-    .result {
+    #result {
       margin-top: 20px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 12px;
+      display: none;
+      animation: resultGlow 2s infinite alternate;
+      box-shadow: 0 0 20px #00ffcc, 0 0 30px #00ffcc50;
+    }
+
+    @keyframes resultGlow {
+      from {
+        box-shadow: 0 0 15px #00ffcc, 0 0 8px #00ffcc33;
+      }
+      to {
+        box-shadow: 0 0 25px #00ffcc, 0 0 15px #00ffcc99;
+      }
+    }
+
+    .close-scan {
+      margin-top: 10px;
+      color: #ffc400;
+      font-size: 14px;
+      text-decoration: underline;
+      cursor: pointer;
+      display: none;
     }
 
     footer {
-      margin-top: 50px;
+      margin-top: 40px;
+      padding: 20px 10px;
+      background: linear-gradient(90deg, #2c005f, #0066cc);
+      color: #fff;
+      font-size: 14px;
       text-align: center;
-      font-size: 13px;
-      color: #555;
-      background: #fff;
-      padding: 15px 0;
-      box-shadow: 0 -1px 8px rgba(0,0,0,0.1);
-    }
-
-    footer strong {
-      color: #007BFF;
+      box-shadow: 0 0 25px #00bfff;
+      border-top: 2px solid #00bfff;
     }
   </style>
 </head>
 <body>
-  <!-- Petals for animation -->
-  <div class="petal"></div>
-  <div class="petal"></div>
-  <div class="petal"></div>
 
-  <!-- Main Container -->
-  <div class="container">
-    <h1>🔍 Verify Your Certificate</h1>
-    <form action="/verify" method="GET">
-      <input type="text" name="cert_id" id="cert_id" placeholder="Enter Certificate ID" required>
-      <button type="submit">Verify</button>
-    </form>
+<header>✨ DreamsHelix Certificate Verification</header>
 
-    <div id="qr-reader" class="qr-box"></div>
-    <button onclick="startQRScanner()">📷 Scan QR Code</button>
+<!-- QR Code Scanner Section -->
+<div class="container">
+  <div id="qr-reader" class="qr-box"></div>
+  <button onclick="startQRScanner()">📷 Scan QR Code</button>
+  <div class="result" id="result"></div>
+</div>
 
-    <div class="result" id="result"></div>
-  </div>
+<!-- Certificate ID Input Section -->
+<div class="container">
+  <h1>🔍 Verify Your Certificate</h1>
+  <form action="/verify" method="GET">
+    <input type="text" name="cert_id" id="cert_id" placeholder="Enter Certificate ID" required>
+    <button type="submit">Verify</button>
+  </form>
+</div>
 
-  <footer>
-    <p>For any querry - support@dreamshelix.com</p>
-    <p>Contact Us - 7978374563</p>
-    <p>© 2025 <strong>DreamsHelix EdTech Pvt. Ltd.</strong> | All Rights Reserved.</p>
-  </footer>
+<!-- 🌟 FOOTER SECTION -->
+<footer>
+  <p>For any querry Contact us</p>
+  <p>Mob - 7978374563</p>
+  <p>Mail - support@dreamshelix.com</p>
+  <p>© 2025 DreamsHelix. All Rights Reserved.</p>
+</footer>
 
-  <script>
-    function startQRScanner() {
-      const qrBox = document.getElementById("qr-reader");
-      qrBox.innerHTML = "";
-      const html5QrCode = new Html5Qrcode("qr-reader");
-      const config = { fps: 10, qrbox: 250 };
+<!-- QR Code Scanner Script -->
+<script>
+  function startQRScanner() {
+    const qrBox = document.getElementById("qr-reader");
+    qrBox.innerHTML = "";
+    const html5QrCode = new Html5Qrcode("qr-reader");
+    const config = { fps: 10, qrbox: 250 };
 
-      html5QrCode.start(
-        { facingMode: "environment" },
-        config,
-        qrCodeMessage => {
-          document.getElementById("cert_id").value = qrCodeMessage;
-          html5QrCode.stop();
-          qrBox.innerHTML = "✅ QR Code detected!";
-        },
-        errorMessage => {
-          // Silently ignore
-        }
-      ).catch(err => {
-        qrBox.innerHTML = "❌ Camera access denied or unavailable.";
-      });
-    }
-  </script>
+    html5QrCode.start(
+      { facingMode: "environment" },
+      config,
+      qrCodeMessage => {
+        document.getElementById("cert_id").value = qrCodeMessage;
+        html5QrCode.stop();
+        qrBox.innerHTML = "✅ QR Code detected!";
+      },
+      errorMessage => {
+        // Ignore errors silently
+      }
+    ).catch(err => {
+      qrBox.innerHTML = "❌ Camera access denied or unavailable.";
+    });
+  }
+</script>
+
+
+
 </body>
 </html>

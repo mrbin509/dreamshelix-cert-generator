@@ -60,13 +60,13 @@ def generate_certificate_pdf(name, cert_id, qr_path):
 
     # === CERTIFICATE ID (right of "Certificate ID -") ===
     pdf.set_font('Poppins', '', 12)
-    cert_id_x = 170  # Right after "Certificate ID -"
-    cert_id_y = 75
+    cert_id_x = 300  # Right after "Certificate ID -"
+    cert_id_y = 160
     pdf.set_xy(cert_id_x, cert_id_y)
-    pdf.cell(300, 15, cert_id)
+    pdf.cell(200, 20, cert_id)
 
     # === QR Code ===
-    pdf.image(qr_path, x=30, y=480, w=60, h=60)
+    pdf.image(qr_path, x=30, y=480, w=80, h=80)
 
     # Save PDF
     pdf_path = f"certificates/{cert_id}.pdf"

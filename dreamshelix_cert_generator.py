@@ -81,7 +81,7 @@ for i, row in enumerate(data):
     batch = row["Batch"]
     roll = row.get("Roll No", f"R{i+1:03}")
 
-    cert_id = generate_cert_id(i + 1)
+    cert_id = generate_cert_id(roll)
     qr_path = generate_qr(cert_id)
     pdf_path = generate_certificate_pdf(name, cert_id, qr_path)
 

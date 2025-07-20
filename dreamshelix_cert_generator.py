@@ -23,7 +23,7 @@ data = sheet.get_all_records()
 
 # === CERTIFICATE ID FORMAT ===
 def generate_cert_id(batch, roll):
-    return f"DH-PWD-{str(batch).zfill(2)}{str(roll)}"
+    return f"DH-PWD-{str(batch).zfill(2)}{str(roll).zfill(3)}"
 
 # === QR CODE GENERATION ===
 def generate_qr(cert_id):

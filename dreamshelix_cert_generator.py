@@ -22,8 +22,8 @@ sheet = client.open(GOOGLE_SHEET_NAME).sheet1
 data = sheet.get_all_records()
 
 # === CERTIFICATE ID FORMAT ===
-def generate_cert_id(index):
-    return f"DH-PWD-{str(index).zfill(5)}"
+def generate_cert_id(batch, roll):
+    return f"DH-PWD-{str(batch).zfill(2)}{str(roll)}"
 
 # === QR CODE GENERATION ===
 def generate_qr(cert_id):
